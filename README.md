@@ -48,3 +48,6 @@ Checklist obbligatoria prima del lancio:
 - Valutare un controllo legale dei testi finali. Non pubblicare la bozza con le note ancora da completare.
 
 La V2 di test resta configurata come noindex globale. /recruiter è accessibile tramite URL diretto, non protetta da autenticazione.
+
+## Marchio
+Il simbolo `public/logo-g.svg` è una ricostruzione vettoriale della G squadrata approvata nel concept grafico; viene utilizzato nella navbar e nella pagina recruiter. `public/favicon.svg` riprende lo stesso tracciato in un riquadro scuro. Per nuove applicazioni utilizzare questi asset (non la precedente lettera G stilizzata con CSS). Il rendering finale va controllato in browser prima del rilascio.

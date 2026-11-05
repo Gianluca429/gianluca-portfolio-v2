@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="25 22 460 465" role="img" aria-labelledby="logoTitle logoDesc">
+<title id="logoTitle">Gianluca Guarino</title>
+<desc id="logoDesc">Monogramma geometrico a forma di G, con taglio angolare superiore e sfumatura viola-lilla-azzurro</desc>
+<defs><linearGradient id="brandGradient" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#8A47F6"/>
+<stop offset="0.45" stop-color="#9457F7"/>
+<stop offset="0.77" stop-color="#8B79FA"/>
+<stop offset="1" stop-color="#8DBAFE"/>
+</linearGradient>
+<linearGradient id="facetGradient" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#7B45EA" stop-opacity="0.65"/><stop offset="1" stop-color="#C2D6FF" stop-opacity="0.10"/></linearGradient>
+<clipPath id="markClip"><path id="silhouette" d="M183 53 C109 53 49 114 49 190 L49 447 Q49 455 57 455 L300 455 C377 453 436 396 443 314 L451 228 Q452 218 442 218 L274 218 C255 217 242 230 237 245 C232 260 242 268 256 279 C270 289 285 293 301 293 L362 293 Q366 293 365 299 L364 319 C363 355 337 381 296 382 L130 382 Q124 382 124 376 L124 196 C124 161 156 129 193 129 L412 129 C436 108 452 85 461 59 Q463 53 455 53 Z"/></clipPath>
+</defs>
+<use href="#silhouette" fill="url(#brandGradient)"/>
+<g clip-path="url(#markClip)">
+<path d="M49 455 L125 382 L255 382 L158 457 Z" fill="url(#facetGradient)" opacity=".42"/>
+<path d="M343 290 L397 218 L460 218 L388 343 Z" fill="#B5BAFF" opacity=".12"/>
+</g></svg>

@@ -176,3 +176,7 @@ a:hover>.project-cover img{transform:scale(1.025)}
 .project__visual .project-cover{min-height:380px}
 @media(max-width:650px){.project-cover,.featured__item--wide .project-cover,.project__visual .project-cover,.case-image .project-cover{aspect-ratio:1.5;min-height:240px}}
 @media(prefers-reduced-motion:reduce){.project-cover img{transition:none}}
+
+/* Brand mark: approved geometric G, traced as SVG from the original concept. */
+img.brand__mark{display:block;flex-shrink:0;width:46px;height:46px;object-fit:contain;padding:0;background:none;border:0;border-radius:0;letter-spacing:normal;font-size:inherit;box-shadow:none}
+@media(max-width:650px){img.brand__mark{width:40px;height:40px}}
