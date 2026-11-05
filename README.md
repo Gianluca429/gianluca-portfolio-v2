@@ -34,3 +34,17 @@ Eseguire `npm run build` sul PC prima del deploy. Il registry npm non è accessi
 - `/metodo`: percorso narrativo a 5 tappe con linea geometrica progressiva su desktop e timeline su mobile.
 - Form: validazione Angular Reactive Forms; **non invia al server**; genera una email tramite il programma di posta. Configurare un provider/backend con protezione anti-spam prima della pubblicazione.
 - Per installare `@angular/forms` dopo il pull: `npm install`.
+
+## Privacy e cookie — verifica prima della pubblicazione
+
+Sono state create le pagine `/privacy` e `/cookie-policy`, collegate dal footer e dal modulo contatti. Sono bozze che descrivono la versione attuale del codice e **non costituiscono ancora informative definitive**.
+
+Checklist obbligatoria prima del lancio:
+- Confermare l'indirizzo email usato per le richieste privacy e la reale identità/recapiti del titolare.
+- Verificare hosting, eventuali access log, provider email, tempi di conservazione e trasferimenti extra SEE.
+- Analizzare nel browser con DevTools i cookie e altri eventuali strumenti tecnici impostati dalla piattaforma.
+- Se si installano analytics, pixel, embed o servizi antispam, aggiornare le informative e configurare, se richiesto, un consenso preventivo.
+- Se il modulo passa da `mailto:` a un backend, aggiornare privacy, fornitori, trattamento dei dati, conservazione e protezione antispam.
+- Valutare un controllo legale dei testi finali. Non pubblicare la bozza con le note ancora da completare.
+
+La V2 di test resta configurata come noindex globale. /recruiter è accessibile tramite URL diretto, non protetta da autenticazione.
