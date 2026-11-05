@@ -11,16 +11,22 @@
 
   <section class="method-journey" id="journey" aria-label="Le cinque fasi del mio metodo" #journey>
     <div class="method-journey__container container">
-      <div class="method-journey__graphic" aria-hidden="true">
-        <svg viewBox="0 0 1000 1950" preserveAspectRatio="none" role="presentation">
-          <path class="method-line method-line--base" d="M500 0 V210 Q500 245 535 245 H815 Q850 245 850 280 V550 Q850 585 815 585 H185 Q150 585 150 620 V900 Q150 935 185 935 H815 Q850 935 850 970 V1250 Q850 1285 815 1285 H185 Q150 1285 150 1320 V1600 Q150 1635 185 1635 H500 V1907" />
-          <path class="method-line method-line--progress" [attr.style]="'stroke-dasharray:' + (lineProgress() * 100) + ' 100'" pathLength="100" d="M500 0 V210 Q500 245 535 245 H815 Q850 245 850 280 V550 Q850 585 815 585 H185 Q150 585 150 620 V900 Q150 935 185 935 H815 Q850 935 850 970 V1250 Q850 1285 815 1285 H185 Q150 1285 150 1320 V1600 Q150 1635 185 1635 H500 V1907" />
-          <path class="method-line__arrow" d="M483 1891 L500 1917 L517 1891" />
+      <div class="method-journey__graphic" aria-hidden="true" #graphic>
+        <svg [attr.viewBox]="pathViewBox()" preserveAspectRatio="none" role="presentation">
+          <path class="method-line method-line--base" [attr.d]="pathData()" />
+          <path
+            class="method-line method-line--progress"
+            #progressPath
+            [attr.d]="pathData()"
+            [attr.stroke-dasharray]="strokeLength()"
+            [attr.stroke-dashoffset]="strokeOffset()"
+          />
+          <path class="method-line__arrow" [attr.d]="arrowData()" [attr.opacity]="arrowVisible() ? 1 : 0" />
         </svg>
       </div>
       @for (step of steps; track step.number; let i = $index) {
         <article class="method-step" [class.method-step--right]="i % 2 === 1" [attr.aria-labelledby]="'method-step-' + i">
-          <div class="method-step__marker" aria-hidden="true"><span>{{ step.number }}</span></div>
+          <div class="method-step__marker" aria-hidden="true" #stepMarker><span>{{ step.number }}</span></div>
           <div class="method-step__content">
             <p class="eyebrow eyebrow--dark">{{ step.eyebrow }}</p>
             <span class="method-step__subtitle">{{ step.subtitle }}</span>

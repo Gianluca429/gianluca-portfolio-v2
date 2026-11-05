@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, DestroyRef, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, ElementRef, inject, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Header } from '../layout/header';
 import { Footer } from '../layout/footer';
@@ -23,7 +23,17 @@ interface MethodStep {
 export class Metodo implements AfterViewInit {
   private readonly destroyRef = inject(DestroyRef);
   @ViewChild('journey') journey?: ElementRef<HTMLElement>;
+  @ViewChild('graphic') graphic?: ElementRef<HTMLElement>;
+  @ViewChild('progressPath') progressPath?: ElementRef<SVGPathElement>;
+  @ViewChildren('stepMarker') stepMarkers!: QueryList<ElementRef<HTMLElement>>;
+
   readonly lineProgress = signal(0);
+  readonly pathData = signal('M 0 0');
+  readonly pathViewBox = signal('0 0 1 1');
+  readonly strokeLength = signal(1);
+  readonly strokeOffset = signal(1);
+  readonly arrowData = signal('M 0 0');
+  readonly arrowVisible = signal(false);
 
   readonly steps: readonly MethodStep[] = [
     {
@@ -78,30 +88,150 @@ export class Metodo implements AfterViewInit {
     },
   ];
 
+
   ngAfterViewInit(): void {
     if (typeof window === 'undefined') return;
-    const target = this.journey?.nativeElement;
-    if (!target) return;
 
+    const target = this.journey?.nativeElement;
+    const graphic = this.graphic?.nativeElement;
+    const progressPath = this.progressPath?.nativeElement;
+    if (!target || !graphic || !progressPath) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let frame = 0;
-    const update = () => {
-      frame = 0;
-      const rect = target.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const start = viewportHeight * 0.72;
-      const end = viewportHeight * 0.2;
-      const total = rect.height + start - end;
-      this.lineProgress.set(Math.max(0, Math.min(1, (start - rect.top) / total)));
+    let totalLength = 1;
+
+    const markerCenters = () => this.stepMarkers.toArray().map((marker) => {
+      const rect = marker.nativeElement.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    });
+
+    const rebuildPath = () => {
+      const bounds = graphic.getBoundingClientRect();
+      const width = bounds.width;
+      const height = bounds.height;
+      const markers = markerCenters().map((point) => ({
+        x: point.x - bounds.left,
+        y: point.y - bounds.top,
+      }));
+
+      // On mobile the SVG is hidden and a vertical CSS track is used instead.
+      if (width <= 0 || height <= 0 || markers.length !== this.steps.length) return;
+
+      const first = markers[0];
+      const last = markers[markers.length - 1];
+      const segments = ['M ' + first.x + ' ' + first.y];
+
+      for (let i = 0; i < markers.length - 1; i++) {
+        const a = markers[i];
+        const b = markers[i + 1];
+        const gap = b.y - a.y;
+        const lane = width * (i % 2 === 0 ? 0.85 : 0.15);
+
+        // Curves are spread across the height between steps, not flat horizontal
+        // runs that would appear to race ahead of vertical scrolling.
+        segments.push(
+          'C ' + a.x + ' ' + (a.y + gap * 0.14)
+          + ', ' + lane + ' ' + (a.y + gap * 0.2)
+          + ', ' + lane + ' ' + (a.y + gap * 0.38),
+          'L ' + lane + ' ' + (a.y + gap * 0.62),
+          'C ' + lane + ' ' + (a.y + gap * 0.8)
+          + ', ' + b.x + ' ' + (a.y + gap * 0.86)
+          + ', ' + b.x + ' ' + b.y,
+        );
+      }
+
+      const finishY = Math.max(last.y + 70, height - 105);
+      segments.push('L ' + last.x + ' ' + finishY);
+
+      const path = segments.join(' ');
+      this.pathData.set(path);
+      this.pathViewBox.set('0 0 ' + width + ' ' + height);
+
+      // Measure the *actual* SVG path, after updating the geometry.
+      progressPath.setAttribute('d', path);
+      totalLength = progressPath.getTotalLength();
+      this.strokeLength.set(totalLength);
     };
-    const schedule = () => {
-      if (!frame) frame = window.requestAnimationFrame(update);
+
+    const updateScroll = () => {
+      const centers = markerCenters();
+      if (centers.length !== this.steps.length) return;
+      const playhead = window.innerHeight * 0.58;
+
+      // The mobile line follows the same reading position, from first to last step.
+      const mobileRange = Math.max(1, centers[centers.length - 1].y - centers[0].y);
+      const mobileRatio = Math.max(0, Math.min(1, (playhead - centers[0].y) / mobileRange));
+      this.lineProgress.set(reducedMotion ? 1 : mobileRatio);
+
+      if (graphic.getBoundingClientRect().height <= 0 || totalLength <= 1) return;
+
+      const bounds = graphic.getBoundingClientRect();
+      const firstPoint = progressPath.getPointAtLength(0);
+      const lastPoint = progressPath.getPointAtLength(totalLength);
+      const relativeY = playhead - bounds.top;
+      const desiredY = Math.max(firstPoint.y, Math.min(lastPoint.y, relativeY));
+
+      // Y grows monotonically along the path; find the arc-length position
+      // corresponding to the actual vertical reading line in the viewport.
+      let lo = 0;
+      let hi = totalLength;
+      for (let i = 0; i < 18; i++) {
+        const middle = (lo + hi) / 2;
+        if (progressPath.getPointAtLength(middle).y < desiredY) lo = middle;
+        else hi = middle;
+      }
+      const lengthShown = reducedMotion
+        ? totalLength
+        : relativeY <= firstPoint.y ? 0
+        : relativeY >= lastPoint.y ? totalLength
+        : (lo + hi) / 2;
+
+      this.strokeOffset.set(totalLength - lengthShown);
+      this.arrowVisible.set(lengthShown > 2);
+
+      // Arrow tip follows the currently drawn end, including in reverse scroll.
+      const tip = progressPath.getPointAtLength(lengthShown);
+      const prev = progressPath.getPointAtLength(Math.max(0, lengthShown - 18));
+      const angle = Math.atan2(tip.y - prev.y, tip.x - prev.x);
+      const wing = 14;
+      const spread = 0.62;
+      const ax = tip.x - wing * Math.cos(angle - spread);
+      const ay = tip.y - wing * Math.sin(angle - spread);
+      const bx = tip.x - wing * Math.cos(angle + spread);
+      const by = tip.y - wing * Math.sin(angle + spread);
+      this.arrowData.set('M ' + ax + ' ' + ay + ' L ' + tip.x + ' ' + tip.y + ' L ' + bx + ' ' + by);
     };
-    update();
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
+
+    const scheduleScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        updateScroll();
+      });
+    };
+
+    const scheduleRebuild = () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        rebuildPath();
+        updateScroll();
+      });
+    };
+
+    const observer = new ResizeObserver(scheduleRebuild);
+    observer.observe(target);
+    observer.observe(graphic);
+
+    window.addEventListener('scroll', scheduleScroll, { passive: true });
+    window.addEventListener('resize', scheduleRebuild);
+    scheduleRebuild();
+
     this.destroyRef.onDestroy(() => {
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
+      observer.disconnect();
+      window.removeEventListener('scroll', scheduleScroll);
+      window.removeEventListener('resize', scheduleRebuild);
       if (frame) window.cancelAnimationFrame(frame);
     });
   }

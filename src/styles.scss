@@ -128,3 +128,7 @@
   .method-outro__inner{align-items:flex-start;flex-direction:column}
 }
 @media(prefers-reduced-motion:reduce){.method-line--progress{transition:none}}
+
+/* Timeline fix: path follows measured step positions; the arrowhead follows the visible tip. */
+.method-line--progress{transition:none}
+.method-line__arrow{stroke:#8861cf;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}
