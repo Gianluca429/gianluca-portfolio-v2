@@ -1,0 +1,42 @@
+<form class="contact-form" [formGroup]="form" (ngSubmit)="prepareEmail()" novalidate aria-label="Modulo di contatto">
+  <div class="contact-form__row">
+    <div class="field">
+      <label for="contact-name">Come ti chiami? <span aria-hidden="true">*</span></label>
+      <input id="contact-name" type="text" formControlName="name" placeholder="Il tuo nome" autocomplete="name" [attr.aria-invalid]="(attempted() || form.controls.name.touched) && form.controls.name.invalid" />
+      @if ((attempted() || form.controls.name.touched) && form.controls.name.invalid) {
+        <small class="field__error">Inserisci un nome di almeno 2 caratteri.</small>
+      }
+    </div>
+    <div class="field">
+      <label for="contact-email">La tua email <span aria-hidden="true">*</span></label>
+      <input id="contact-email" type="email" formControlName="email" placeholder="nome@esempio.it" autocomplete="email" [attr.aria-invalid]="(attempted() || form.controls.email.touched) && form.controls.email.invalid" />
+      @if ((attempted() || form.controls.email.touched) && form.controls.email.invalid) {
+        <small class="field__error">Inserisci un indirizzo email valido.</small>
+      }
+    </div>
+  </div>
+  <div class="field">
+    <label for="contact-type">Di cosa vorresti parlare? <span class="field__optional">Facoltativo</span></label>
+    <select id="contact-type" formControlName="projectType">
+      <option value="">Seleziona un argomento</option>
+      <option value="Sito web">Realizzazione di un sito web</option>
+      <option value="Interfaccia o applicazione">Interfaccia o applicazione web</option>
+      <option value="Collaborazione">Collaborazione professionale</option>
+      <option value="Altro">Altro</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="contact-message">Raccontami la tua idea <span aria-hidden="true">*</span></label>
+    <textarea id="contact-message" formControlName="message" rows="5" placeholder="Di cosa hai bisogno? Quali obiettivi hai in mente?" [attr.aria-invalid]="(attempted() || form.controls.message.touched) && form.controls.message.invalid"></textarea>
+    @if ((attempted() || form.controls.message.touched) && form.controls.message.invalid) {
+      <small class="field__error">Scrivi un messaggio di almeno 15 caratteri.</small>
+    }
+  </div>
+  <div class="contact-form__footer">
+    <button class="pill pill--white" type="submit">Prepara il messaggio ↗</button>
+    <p class="contact-form__notice">Versione di test: il pulsante apre la tua app email con un messaggio precompilato. Non invia ancora dati dal sito.</p>
+  </div>
+  @if (mailReady()) {
+    <p class="contact-form__status" role="status">Messaggio preparato. Controlla la tua app email e premi Invia per completare l'operazione.</p>
+  }
+</form>

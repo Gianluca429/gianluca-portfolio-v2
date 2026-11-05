@@ -1,10 +1,100 @@
-<app-header/>
+<app-header />
 <main>
-<section class="hero container"><div class="hero__copy"><p class="eyebrow"><span class="dot"></span> FRONT-END DEVELOPMENT &amp; WEB DESIGN</p><h1>Idee digitali,<br><span>progettate</span><br>per distinguersi.</h1><p class="hero__lead">Sviluppo interfacce e siti web che uniscono design, attenzione ai dettagli e codice. Due anime, un unico approccio.</p><div class="actions"><a class="pill pill--accent" routerLink="/projects">Esplora i progetti ↗</a><a class="subtle-link" href="mailto:ciao@gianlucaguarino.it?subject=Nuovo%20progetto">Lavoriamo insieme ↗</a></div><div class="hero__meta"><span>01 / 04</span><span>DESIGN &amp; DEVELOPMENT</span><span>SCOPRI DI PIÙ ↓</span></div></div><div class="hero__art" aria-label="Illustrazione segnaposto di un'interfaccia digitale"><div class="window"><div class="window__top"><i></i><i></i><i></i><span>portfolio / preview</span></div><div class="window__inner"><small>DESIGN SYSTEM / 2026</small><strong>Crafting<br>digital<br><em>experiences.</em></strong><div class="window__line"></div><div class="window__chips"><b></b><b></b><b></b></div></div></div><p>INTERFACE PREVIEW · PLACEHOLDER</p></div></section>
-<section class="section section--light" id="work"><div class="container"><div class="heading"><div><p class="eyebrow eyebrow--dark">01 / LAVORI SELEZIONATI</p><h2>Il progetto è<br><em>il protagonista.</em></h2></div><p>Progetti personali che esplorano interfacce, esperienze digitali e linguaggi visivi differenti.</p></div><div class="featured">
-@for (p of featured; track p.slug; let i=$index) {<a class="featured__item" [class.featured__item--wide]="i===0" [routerLink]="['/projects',p.slug]"><div class="placeholder" [class]="'placeholder placeholder--'+p.tone"><span class="placeholder__top">{{p.category}} / CONCEPT</span><strong>{{p.title}}</strong><span class="placeholder__bottom">ANTEPRIMA PROGETTO · IN ARRIVO</span></div><div class="featured__meta"><div><small>{{p.kind}} · {{p.category}}</small><h3>{{p.title}}</h3><p>{{p.description}}</p></div><span>↗</span></div></a>}
-</div><a class="underlined" routerLink="/projects">Scopri tutti i progetti ↗</a></div></section>
-<section class="section" id="services"><div class="container"><p class="eyebrow">02 / COSA FACCIO</p><h2>Forma, funzione.<br><em>E tutto ciò che le unisce.</em></h2><div class="services"><article><small>01</small><h3>Web design</h3><p>Interfacce, identità e gerarchie visive progettate attorno ai contenuti.</p></article><article><small>02</small><h3>Front-end development</h3><p>Esperienze responsive e interazioni sviluppate con codice attento ai dettagli.</p></article><article><small>03</small><h3>Esperienze digitali</h3><p>Landing page, portfolio e strumenti web costruiti per esigenze differenti.</p></article></div></div></section>
-<section class="section section--light" id="about"><div class="container about"><div class="about__visual"><small>FOTOGRAFIA · PLACEHOLDER</small><strong>Design<br><em>meets code.</em></strong></div><div><p class="eyebrow eyebrow--dark">03 / CHI SONO</p><h2>Dietro ogni<br><em>interfaccia,</em><br>una scelta.</h2><p>Sono Gianluca, front-end developer con un interesse particolare per il web design. Lavoro tra sviluppo, contenuti digitali e cura dell'esperienza utente.</p><p>Mi piace trasformare requisiti in interfacce chiare e funzionali, senza perdere di vista ciò che conta.</p><a class="underlined" href="mailto:ciao@gianlucaguarino.it?subject=Ciao%20Gianluca">Contattami ↗</a></div></div></section>
-<section class="contact" id="contact"><div class="container contact__inner"><div><p class="eyebrow">04 / CONTATTI</p><h2>Hai un'idea?<br><em>Partiamo da qui.</em></h2></div><a class="pill pill--white" href="mailto:ciao@gianlucaguarino.it?subject=Nuovo%20progetto">Scrivimi ↗</a></div></section>
-</main><app-footer/>
+  <section class="hero container" aria-labelledby="hero-title">
+    <div class="hero__copy">
+      <p class="eyebrow"><span class="dot"></span> FRONT-END DEVELOPMENT &amp; WEB DESIGN</p>
+      <h1 id="hero-title">Idee digitali,<br /><span>progettate</span><br />per distinguersi.</h1>
+      <p class="hero__lead">
+        Sviluppo interfacce e siti web che uniscono design, attenzione ai dettagli e codice.
+        Due anime, un unico approccio.
+      </p>
+      <div class="actions">
+        <a class="pill pill--accent" routerLink="/projects">Esplora i progetti ↗</a>
+        <a class="subtle-link" routerLink="/" fragment="contact">Lavoriamo insieme ↗</a>
+      </div>
+      <div class="hero__bottom">
+        <a class="hero__scroll" href="#work" aria-label="Scorri alla sezione Lavori selezionati">
+          Scopri di più <span aria-hidden="true">↓</span>
+        </a>
+      </div>
+    </div>
+    <div class="hero__art" aria-label="Anteprima grafica dimostrativa di un'interfaccia web">
+      <div class="window">
+        <div class="window__top"><i></i><i></i><i></i><span>portfolio / preview</span></div>
+        <div class="window__inner">
+          <small>DESIGN SYSTEM / 2026</small>
+          <strong>Crafting<br />digital<br /><em>experiences.</em></strong>
+          <div class="window__line"></div>
+          <div class="window__chips"><b></b><b></b><b></b></div>
+        </div>
+      </div>
+      <p>INTERFACE PREVIEW · PLACEHOLDER</p>
+    </div>
+  </section>
+
+  <section class="section section--light" id="work" aria-labelledby="work-title">
+    <div class="container">
+      <div class="heading">
+        <div>
+          <p class="eyebrow eyebrow--dark">01 / LAVORI SELEZIONATI</p>
+          <h2 id="work-title">Il progetto è<br /><em>il protagonista.</em></h2>
+        </div>
+        <p>Progetti personali che esplorano interfacce, esperienze digitali e linguaggi visivi differenti.</p>
+      </div>
+      <div class="featured">
+        @for (p of featured; track p.slug; let i = $index) {
+          <a class="featured__item" [class.featured__item--wide]="i === 0" [routerLink]="['/projects', p.slug]">
+            <div [class]="'placeholder placeholder--' + p.tone">
+              <span class="placeholder__top">{{ p.category }} / CONCEPT</span>
+              <strong>{{ p.title }}</strong>
+              <span class="placeholder__bottom">ANTEPRIMA PROGETTO · IN ARRIVO</span>
+            </div>
+            <div class="featured__meta">
+              <div>
+                <small>{{ p.kind }} · {{ p.category }}</small>
+                <h3>{{ p.title }}</h3>
+                <p>{{ p.description }}</p>
+              </div>
+              <span aria-hidden="true">↗</span>
+            </div>
+          </a>
+        }
+      </div>
+      <a class="underlined" routerLink="/projects">Scopri tutti i progetti ↗</a>
+    </div>
+  </section>
+
+  <section class="section home-method" aria-labelledby="method-teaser-title">
+    <div class="container home-method__grid">
+      <div>
+        <p class="eyebrow">02 / APPROCCIO</p>
+        <h2 id="method-teaser-title">Un buon sito<br /><em>nasce prima del codice.</em></h2>
+      </div>
+      <div class="home-method__copy">
+        <p>
+          Sono Gianluca, front-end developer con una forte attenzione al web design.
+          Mi interessa capire prima di costruire: contenuti, obiettivi, struttura e
+          il modo in cui le persone useranno un'interfaccia.
+        </p>
+        <p>
+          Ho raccolto il mio approccio in un percorso di cinque tappe, con esempi
+          tratti dai progetti personali che trovi qui.
+        </p>
+        <a class="underlined" routerLink="/metodo">Scopri il mio metodo ↗</a>
+      </div>
+    </div>
+    <div class="container home-method__rule" aria-hidden="true"><span>DALLE IDEE AL PROGETTO</span><span>→</span></div>
+  </section>
+
+  <section class="contact contact--form" id="contact" aria-labelledby="contact-title">
+    <div class="container contact-form-layout">
+      <div class="contact-form-layout__intro">
+        <p class="eyebrow">03 / CONTATTI</p>
+        <h2 id="contact-title">Hai un'idea?<br /><em>Partiamo da qui.</em></h2>
+        <p>Raccontami cosa hai in mente. Anche poche informazioni bastano per iniziare una conversazione concreta.</p>
+      </div>
+      <app-contact-form />
+    </div>
+  </section>
+</main>
+<app-footer />

@@ -28,3 +28,9 @@ Il contenuto /recruiter è nascosto dalla navigazione, **non protetto da passwor
 
 ## Verifiche
 Eseguire `npm run build` sul PC prima del deploy. Il registry npm non è accessibile dall'ambiente di preparazione.
+
+## Revisione V2.1
+- Home: hero ripulita, scroll ai lavori, mini presentazione e modulo contatti unico.
+- `/metodo`: percorso narrativo a 5 tappe con linea geometrica progressiva su desktop e timeline su mobile.
+- Form: validazione Angular Reactive Forms; **non invia al server**; genera una email tramite il programma di posta. Configurare un provider/backend con protezione anti-spam prima della pubblicazione.
+- Per installare `@angular/forms` dopo il pull: `npm install`.
