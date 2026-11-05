@@ -110,41 +110,36 @@ export class Metodo implements AfterViewInit {
       const bounds = graphic.getBoundingClientRect();
       const width = bounds.width;
       const height = bounds.height;
-      const markers = markerCenters().map((point) => ({
-        x: point.x - bounds.left,
-        y: point.y - bounds.top,
-      }));
+      // Restore the original squared, serpentine line geometry.
+      // Coordinates are proportional to the original 1000 x 1950 SVG.
+      const x = (value: number) => (value / 1000) * width;
+      const y = (value: number) => (value / 1950) * height;
+      if (width <= 0 || height <= 0) return;
 
-      // On mobile the SVG is hidden and a vertical CSS track is used instead.
-      if (width <= 0 || height <= 0 || markers.length !== this.steps.length) return;
+      const path = [
+        `M ${x(500)} ${y(0)}`,
+        `V ${y(210)}`,
+        `Q ${x(500)} ${y(245)} ${x(535)} ${y(245)}`,
+        `H ${x(815)}`,
+        `Q ${x(850)} ${y(245)} ${x(850)} ${y(280)}`,
+        `V ${y(550)}`,
+        `Q ${x(850)} ${y(585)} ${x(815)} ${y(585)}`,
+        `H ${x(185)}`,
+        `Q ${x(150)} ${y(585)} ${x(150)} ${y(620)}`,
+        `V ${y(900)}`,
+        `Q ${x(150)} ${y(935)} ${x(185)} ${y(935)}`,
+        `H ${x(815)}`,
+        `Q ${x(850)} ${y(935)} ${x(850)} ${y(970)}`,
+        `V ${y(1250)}`,
+        `Q ${x(850)} ${y(1285)} ${x(815)} ${y(1285)}`,
+        `H ${x(185)}`,
+        `Q ${x(150)} ${y(1285)} ${x(150)} ${y(1320)}`,
+        `V ${y(1600)}`,
+        `Q ${x(150)} ${y(1635)} ${x(185)} ${y(1635)}`,
+        `H ${x(500)}`,
+        `V ${y(1907)}`,
+      ].join(' ');
 
-      const first = markers[0];
-      const last = markers[markers.length - 1];
-      const segments = ['M ' + first.x + ' ' + first.y];
-
-      for (let i = 0; i < markers.length - 1; i++) {
-        const a = markers[i];
-        const b = markers[i + 1];
-        const gap = b.y - a.y;
-        const lane = width * (i % 2 === 0 ? 0.85 : 0.15);
-
-        // Curves are spread across the height between steps, not flat horizontal
-        // runs that would appear to race ahead of vertical scrolling.
-        segments.push(
-          'C ' + a.x + ' ' + (a.y + gap * 0.14)
-          + ', ' + lane + ' ' + (a.y + gap * 0.2)
-          + ', ' + lane + ' ' + (a.y + gap * 0.38),
-          'L ' + lane + ' ' + (a.y + gap * 0.62),
-          'C ' + lane + ' ' + (a.y + gap * 0.8)
-          + ', ' + b.x + ' ' + (a.y + gap * 0.86)
-          + ', ' + b.x + ' ' + b.y,
-        );
-      }
-
-      const finishY = Math.max(last.y + 70, height - 105);
-      segments.push('L ' + last.x + ' ' + finishY);
-
-      const path = segments.join(' ');
       this.pathData.set(path);
       this.pathViewBox.set('0 0 ' + width + ' ' + height);
 
@@ -170,15 +165,21 @@ export class Metodo implements AfterViewInit {
       const firstPoint = progressPath.getPointAtLength(0);
       const lastPoint = progressPath.getPointAtLength(totalLength);
       const relativeY = playhead - bounds.top;
-      const desiredY = Math.max(firstPoint.y, Math.min(lastPoint.y, relativeY));
+      // Map scrolling to arc length without sudden jumps at the original
+      // horizontal runs. Blend the path's vertical coordinate with distance
+      // travelled, so a flat segment receives a little scroll distance.
+      const virtualY = (length: number) => {
+        const verticalY = progressPath.getPointAtLength(length).y;
+        const distanceY = firstPoint.y
+          + (lastPoint.y - firstPoint.y) * (length / totalLength);
+        return verticalY * 0.65 + distanceY * 0.35;
+      };
 
-      // Y grows monotonically along the path; find the arc-length position
-      // corresponding to the actual vertical reading line in the viewport.
       let lo = 0;
       let hi = totalLength;
-      for (let i = 0; i < 18; i++) {
+      for (let i = 0; i < 20; i++) {
         const middle = (lo + hi) / 2;
-        if (progressPath.getPointAtLength(middle).y < desiredY) lo = middle;
+        if (virtualY(middle) < relativeY) lo = middle;
         else hi = middle;
       }
       const lengthShown = reducedMotion
