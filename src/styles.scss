@@ -166,3 +166,13 @@
 .recruiter__legal{display:flex;gap:27px;padding:20px 0 30px;border-top:1px solid #ffffff2c;color:#bbb3ce;font-size:12px}
 @media(max-width:880px){.legal-layout{grid-template-columns:1fr;gap:36px}.legal-toc{position:static;flex-direction:row;align-items:center;gap:10px 20px;flex-wrap:wrap;padding-bottom:24px;border-bottom:1px solid #dcd7e4}.legal-toc .eyebrow{width:100%;margin:0 0 5px}.legal-body{padding:70px 0}}
 @media(max-width:650px){.legal-hero{padding:65px 0 42px}.legal-hero h1{font-size:clamp(52px,13vw,79px)}.legal-hero__lead{margin:20px 0 48px;font-size:15px}.legal-hero__meta{flex-direction:column;gap:6px}.legal-body{padding:50px 0 75px}.legal-content h2{font-size:35px}.legal-content p{font-size:14px}.legal-notice{padding:20px}.legal-related{align-items:flex-start;flex-direction:column}.footer__legal{gap:15px}}
+
+/* Project cover assets reused from original project Open Graph metadata. */
+.project-cover{display:grid;place-items:center;position:relative;overflow:hidden;min-height:340px;aspect-ratio:1.5;background:#26203c;isolation:isolate}
+.project-cover--blue{background:#1c2b44}.project-cover--purple{background:#392950}.project-cover--warm{background:#7e6259}.project-cover--lilac{background:#9a90b9}
+.project-cover img{display:block;width:100%;height:100%;object-fit:contain;transition:transform .35s ease}
+a:hover>.project-cover img{transform:scale(1.025)}
+.featured__item--wide .project-cover,.case-image .project-cover{aspect-ratio:2.2;min-height:440px}
+.project__visual .project-cover{min-height:380px}
+@media(max-width:650px){.project-cover,.featured__item--wide .project-cover,.project__visual .project-cover,.case-image .project-cover{aspect-ratio:1.5;min-height:240px}}
+@media(prefers-reduced-motion:reduce){.project-cover img{transition:none}}

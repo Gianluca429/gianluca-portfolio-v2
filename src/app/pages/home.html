@@ -44,10 +44,8 @@
       <div class="featured">
         @for (p of featured; track p.slug; let i = $index) {
           <a class="featured__item" [class.featured__item--wide]="i === 0" [routerLink]="['/projects', p.slug]">
-            <div [class]="'placeholder placeholder--' + p.tone">
-              <span class="placeholder__top">{{ p.category }} / CONCEPT</span>
-              <strong>{{ p.title }}</strong>
-              <span class="placeholder__bottom">ANTEPRIMA PROGETTO · IN ARRIVO</span>
+            <div [class]="'project-cover project-cover--' + p.tone">
+              <img [src]="p.cover" [alt]="'Anteprima originale di ' + p.title" loading="lazy" decoding="async" />
             </div>
             <div class="featured__meta">
               <div>
