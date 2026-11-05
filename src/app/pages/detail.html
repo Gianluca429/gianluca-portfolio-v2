@@ -1,0 +1,8 @@
+<app-header/>
+@if (project; as p) {
+<main><section class="case-head container"><a class="back" routerLink="/projects">← Tutti i progetti</a><p class="eyebrow">{{p.category}} / CASE STUDY</p><h1>{{p.title}}<span class="accent">.</span></h1><div class="case-head__info"><p>{{p.description}}</p><span>{{p.kind}}</span></div></section>
+<section class="case-image container"><div class="placeholder" [class]="'placeholder placeholder--'+p.tone"><span class="placeholder__top">CASE STUDY / 2026</span><strong>{{p.title}}</strong><span class="placeholder__bottom">IMMAGINI REALI · IN ARRIVO</span></div></section>
+<section class="section section--light"><div class="container case-section"><div><p class="eyebrow eyebrow--dark">01 / LA SFIDA</p><h2>Da dove<br><em>si parte.</em></h2></div><p>{{p.challenge}}</p></div><div class="container case-section"><div><p class="eyebrow eyebrow--dark">02 / LA SOLUZIONE</p><h2>Le scelte<br><em>progettuali.</em></h2></div><div><p>{{p.solution}}</p><div class="tags">@for (tech of p.stack;track tech){<span>{{tech}}</span>}</div></div></div></section>
+<section class="section"><div class="container"><p class="eyebrow">03 / APPROFONDIMENTI</p><h2>Progetto<br><em>in costruzione.</em></h2><p class="muted">Schermate reali e dettagli del processo verranno aggiunti dopo la revisione dei materiali.</p><a class="pill pill--outline" routerLink="/projects">Altri progetti ↗</a></div></section></main>
+} @else {<main class="container error"><h1>Progetto non trovato.</h1><a class="pill pill--accent" routerLink="/projects">Torna ai progetti</a></main>}
+<app-footer/>
