@@ -180,3 +180,9 @@ a:hover>.project-cover img{transform:scale(1.025)}
 /* Brand mark: approved geometric G, traced as SVG from the original concept. */
 img.brand__mark{display:block;flex-shrink:0;width:46px;height:46px;object-fit:contain;padding:0;background:none;border:0;border-radius:0;letter-spacing:normal;font-size:inherit;box-shadow:none}
 @media(max-width:650px){img.brand__mark{width:40px;height:40px}}
+
+/* Same-page contact submission and anti-spam. */
+.contact-honeypot{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+.contact-form__security{min-height:48px;margin:0 0 18px}
+.contact-form button:disabled{cursor:not-allowed;opacity:.6;transform:none}
+.contact-form__status--error{background:#55244270;border:1px solid #ffd2dd55}

@@ -51,3 +51,24 @@ La V2 di test resta configurata come noindex globale. /recruiter è accessibile 
 
 ## Marchio
 Il simbolo `public/logo-g.svg` è una ricostruzione vettoriale della G squadrata approvata nel concept grafico; viene utilizzato nella navbar e nella pagina recruiter. `public/favicon.svg` riprende lo stesso tracciato in un riquadro scuro. Per nuove applicazioni utilizzare questi asset (non la precedente lettera G stilizzata con CSS). Il rendering finale va controllato in browser prima del rilascio.
+
+## Invio form dal sito (Cloudflare Worker + Resend + Turnstile)
+
+Il form ora fa POST a `/api/contact` e **non utilizza più `mailto:`**. Il Worker in `worker/index.js` valida i campi, verifica un token Cloudflare Turnstile sul server e inoltra a Resend via API. Il pulsante rimane **disabilitato** se l'ambiente non è configurato: non simuliamo un invio.
+
+1. Creare un account Resend, verificare un dominio mittente e generare una API key. Il `from` deve appartenere a un dominio autorizzato.
+2. Configurare un widget Cloudflare Turnstile per il dominio del portfolio, ottenere *site key* e *secret key*. Valutare l'impatto privacy e aggiornare le informative.
+3. Pubblicare la build Angular con il Worker di `wrangler.jsonc`; le rotte `/api/*` devono andare al Worker, mentre le altre rotte restano asset statici SPA.
+4. In Cloudflare configurare **segreti**, non valori nel repository:
+   - `RESEND_API_KEY`: chiave API Resend
+   - `RESEND_FROM`: mittente verificato, per esempio `Portfolio <contatti@dominio-verificato.it>`
+   - `CONTACT_TO_EMAIL`: casella che riceve le richieste
+   - `TURNSTILE_SECRET`: chiave segreta Turnstile
+   - `TURNSTILE_SITE_KEY`: chiave pubblica Turnstile (può essere variabile normale)
+5. Il browser legge solo la *site key* dall'endpoint `GET /api/contact/config`. L'API invia una email plain-text con il mittente del sito e l'indirizzo dell'utente come `reply_to`.
+6. Verificare dal dominio configurato: invio valido; form errato; verifica Turnstile fallita; servizio email non disponibile. Controllare recapito e spam.
+7. In locale con `npm start` è disponibile soltanto il frontend Angular. Per provare l'invio reale occorre servire anche Worker e asset (build + `npx wrangler dev`), con variabili/segreti locali appropriati. Non caricare le credenziali nel codice client.
+
+**Attenzione:** l'email indicata nella versione precedente, `ciao@gianlucaguarino.it`, non è stata confermata. L'indirizzo destinatario viene per questo configurato con `CONTACT_TO_EMAIL` e non è hardcoded nel Worker. Non pubblicare il modulo prima di aver scelto e configurato correttamente recapito e dominio.
+
+**Privacy:** le informative restano bozze finché non siano verificati davvero hosting, Resend, Turnstile, cookie, trattamenti e periodi di conservazione. Considerare anche rate limiting lato Cloudflare per ridurre abusi; Turnstile e honeypot non sostituiscono una quota/rate limit robusta.

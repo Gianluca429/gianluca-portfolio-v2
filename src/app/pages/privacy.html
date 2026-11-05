@@ -39,8 +39,8 @@
           <h3>Dati di navigazione</h3>
           <p>Durante la visita, l’infrastruttura utilizzata per pubblicare il sito può elaborare dati tecnici necessari alla comunicazione e alla sicurezza, come indirizzo IP, orario della richiesta, risorsa richiesta e informazioni sul browser. Le impostazioni e i log effettivi del fornitore di hosting dovranno essere verificati prima del rilascio.</p>
           <h3>Dati forniti volontariamente</h3>
-          <p>Se scrivi un'email, vengono comunicati il tuo indirizzo email, il nome eventualmente indicato e le informazioni inserite nel messaggio. Il form attuale raccoglie nome, email, tipologia facoltativa del progetto e testo del messaggio <strong>solo nel browser</strong> per preparare un’email: non invia direttamente questi dati a un server del portfolio.</p>
-          <p>L'email viene effettivamente inviata solo se l'utente conferma l'invio nella propria applicazione di posta, secondo le regole e le impostazioni del servizio utilizzato.</p>
+          <p>Se scrivi un'email, vengono comunicati il tuo indirizzo email, il nome eventualmente indicato e le informazioni inserite nel messaggio. Il modulo di contatto è stato predisposto per inviare nome, indirizzo email, tipologia facoltativa del progetto e messaggio a un endpoint serverless sullo stesso sito. L’invio reale sarà attivo solo dopo la configurazione dei servizi necessari: fino ad allora il pulsante rimane disabilitato.</p>
+          <p>Quando il servizio sarà configurato, la richiesta sarà validata dal server e inoltrata tramite un provider di recapito email. È prevista una verifica antispam Cloudflare Turnstile; il browser comunica a Cloudflare le informazioni necessarie al suo funzionamento. Prima della pubblicazione andranno verificati e documentati i relativi trattamenti.</p>
         </section>
 
         <section id="privacy-purposes" aria-labelledby="purpose-heading">
@@ -48,14 +48,14 @@
           <h2 id="purpose-heading">Perché vengono utilizzati?</h2>
           <p>I messaggi ricevuti sono utilizzati per rispondere alle richieste, valutare eventuali collaborazioni e gestire le comunicazioni preliminari relative a un progetto. La base giuridica può essere l’esecuzione di misure precontrattuali richieste dall’interessato (art. 6, par. 1, lett. b, GDPR), quando pertinente alla richiesta.</p>
           <p>I dati tecnici eventualmente trattati per sicurezza e funzionamento del sito possono ricadere nel legittimo interesse a mantenere un servizio affidabile e protetto (art. 6, par. 1, lett. f, GDPR), previa verifica delle modalità effettive del servizio di hosting.</p>
-          <p>I campi del form contrassegnati con un asterisco servono per poter rispondere. Non sono previsti, in questa versione del codice, newsletter, profilazione pubblicitaria né decisioni automatizzate basate sui dati del form.</p>
+          <p>I campi del form contrassegnati con un asterisco servono per poter rispondere. Non sono previsti, in questa versione del codice, newsletter, profilazione pubblicitaria né decisioni automatizzate basate sul contenuto delle richieste. La verifica Turnstile è una misura contro l'abuso del modulo.</p>
         </section>
 
         <section id="privacy-providers" aria-labelledby="providers-heading">
           <span class="legal-section-num">04 / FORNITORI</span>
           <h2 id="providers-heading">Chi può avere accesso ai dati?</h2>
-          <p>Quando configurati, il fornitore di hosting e il servizio di posta elettronica potrebbero trattare dati tecnici o messaggi per consentire l’erogazione dei rispettivi servizi. Gli eventuali destinatari, responsabili del trattamento, sedi del trattamento e trasferimenti verso Paesi extra SEE saranno elencati dopo la scelta e la verifica dei fornitori effettivi.</p>
-          <p><strong>Da completare prima del lancio:</strong> identificazione dei fornitori, verifiche contrattuali e informazioni sugli eventuali trasferimenti internazionali.</p>
+          <p>La configurazione proposta prevede Cloudflare Workers (hosting, verifica Turnstile) e Resend (recapito email). Questi fornitori, quando effettivamente attivati, possono trattare dati tecnici o messaggi per consentire l’erogazione dei rispettivi servizi. Gli eventuali destinatari, responsabili del trattamento, sedi del trattamento e trasferimenti verso Paesi extra SEE saranno elencati dopo la scelta e la verifica dei fornitori effettivi.</p>
+          <p><strong>Da completare prima del lancio:</strong> verifica dei contratti e delle informative aggiornate di Cloudflare e Resend, delle rispettive sedi e degli eventuali trasferimenti internazionali.</p>
         </section>
 
         <section id="privacy-retention" aria-labelledby="retention-heading">
