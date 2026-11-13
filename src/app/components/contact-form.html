@@ -1,52 +1,135 @@
-<form class="contact-form" [formGroup]="form" (ngSubmit)="sendMessage()" novalidate aria-label="Modulo di contatto">
+<form
+  class="contact-form"
+  [formGroup]="form"
+  (ngSubmit)="sendMessage()"
+  novalidate
+  aria-label="Modulo di contatto"
+>
   <div class="contact-form__row">
     <div class="field">
-      <label for="contact-name">Come ti chiami? <span aria-hidden="true">*</span></label>
-      <input id="contact-name" type="text" formControlName="name" placeholder="Il tuo nome" autocomplete="name" maxlength="100" [attr.aria-invalid]="(attempted() || form.controls.name.touched) && form.controls.name.invalid" />
-      @if ((attempted() || form.controls.name.touched) && form.controls.name.invalid) {
-        <small class="field__error">Inserisci un nome tra 2 e 100 caratteri.</small>
+      <label for="contact-name"
+        >Come ti chiami? <span aria-hidden="true">*</span></label
+      >
+      <input
+        id="contact-name"
+        type="text"
+        formControlName="name"
+        placeholder="Il tuo nome"
+        autocomplete="name"
+        maxlength="100"
+        [attr.aria-invalid]="(attempted() || form.controls.name.touched) && form.controls.name.invalid"
+      />
+      @if ((attempted() || form.controls.name.touched) &&
+      form.controls.name.invalid) {
+      <small class="field__error"
+        >Inserisci un nome tra 2 e 100 caratteri.</small
+      >
       }
     </div>
     <div class="field">
-      <label for="contact-email">La tua email <span aria-hidden="true">*</span></label>
-      <input id="contact-email" type="email" formControlName="email" placeholder="nome@esempio.it" autocomplete="email" maxlength="254" [attr.aria-invalid]="(attempted() || form.controls.email.touched) && form.controls.email.invalid" />
-      @if ((attempted() || form.controls.email.touched) && form.controls.email.invalid) {
-        <small class="field__error">Inserisci un indirizzo email valido.</small>
+      <label for="contact-email"
+        >La tua email <span aria-hidden="true">*</span></label
+      >
+      <input
+        id="contact-email"
+        type="email"
+        formControlName="email"
+        placeholder="nome@esempio.it"
+        autocomplete="email"
+        maxlength="254"
+        [attr.aria-invalid]="(attempted() || form.controls.email.touched) && form.controls.email.invalid"
+      />
+      @if ((attempted() || form.controls.email.touched) &&
+      form.controls.email.invalid) {
+      <small class="field__error">Inserisci un indirizzo email valido.</small>
       }
     </div>
   </div>
   <div class="field">
-    <label for="contact-type">Di cosa vorresti parlare? <span class="field__optional">Facoltativo</span></label>
+    <label for="contact-type"
+      >Di cosa vorresti parlare?
+      <span class="field__optional">Facoltativo</span></label
+    >
     <select id="contact-type" formControlName="projectType">
       <option value="">Seleziona un argomento</option>
       <option value="Sito web">Realizzazione di un sito web</option>
-      <option value="Interfaccia o applicazione">Interfaccia o applicazione web</option>
+      <option value="Interfaccia o applicazione">
+        Interfaccia o applicazione web
+      </option>
       <option value="Collaborazione">Collaborazione professionale</option>
       <option value="Altro">Altro</option>
     </select>
   </div>
   <div class="field">
-    <label for="contact-message">Raccontami la tua idea <span aria-hidden="true">*</span></label>
-    <textarea id="contact-message" formControlName="message" rows="5" minlength="15" maxlength="4000" placeholder="Di cosa hai bisogno? Quali obiettivi hai in mente?" [attr.aria-invalid]="(attempted() || form.controls.message.touched) && form.controls.message.invalid"></textarea>
-    @if ((attempted() || form.controls.message.touched) && form.controls.message.invalid) {
-      <small class="field__error">Scrivi un messaggio tra 15 e 4.000 caratteri.</small>
+    <label for="contact-message"
+      >Raccontami la tua idea <span aria-hidden="true">*</span></label
+    >
+    <textarea
+      id="contact-message"
+      formControlName="message"
+      rows="5"
+      minlength="15"
+      maxlength="4000"
+      placeholder="Di cosa hai bisogno? Quali obiettivi hai in mente?"
+      [attr.aria-invalid]="(attempted() || form.controls.message.touched) && form.controls.message.invalid"
+    ></textarea>
+    @if ((attempted() || form.controls.message.touched) &&
+    form.controls.message.invalid) {
+    <small class="field__error"
+      >Scrivi un messaggio tra 15 e 4.000 caratteri.</small
+    >
     }
   </div>
   <div class="contact-honeypot" aria-hidden="true">
     <label for="contact-company-website">Lascia vuoto questo campo</label>
-    <input id="contact-company-website" formControlName="companyWebsite" tabindex="-1" autocomplete="off" />
+    <input
+      id="contact-company-website"
+      formControlName="companyWebsite"
+      tabindex="-1"
+      autocomplete="off"
+    />
   </div>
-  <div class="contact-form__security" id="contact-turnstile" aria-label="Verifica antispam"></div>
-  <p class="contact-form__privacy">Utilizzerò i dati che invii per rispondere alla richiesta. Leggi la <a href="/privacy">Privacy Policy</a> prima di procedere. Il modulo utilizza Cloudflare Turnstile per limitare lo spam.</p>
+  <div
+    class="contact-form__security"
+    id="contact-turnstile"
+    aria-label="Verifica antispam"
+  ></div>
+  <p class="contact-form__privacy">
+    Utilizzerò i dati che invii per rispondere alla richiesta. Leggi la
+    <a href="/privacy">Privacy Policy</a> prima di procedere. Il modulo utilizza
+    Cloudflare Turnstile per limitare lo spam.
+  </p>
   <div class="contact-form__footer">
-    <button class="pill pill--white" type="submit" [disabled]="!ready() || sending() || loading()" [attr.aria-busy]="sending()">
+    <button
+      class="pill pill--white"
+      type="submit"
+      [disabled]="!ready() || sending() || loading() || form.invalid || !token()"
+      [attr.aria-busy]="sending()"
+    >
       {{ sending() ? 'Invio in corso…' : 'Invia messaggio ↗' }}
     </button>
-    @if (loading()) { <p class="contact-form__notice">Verifica disponibilità del servizio di invio…</p> }
-    @else if (!ready()) { <p class="contact-form__notice">Il servizio di invio non è ancora configurato in questa anteprima.</p> }
-    @else { <p class="contact-form__notice">Il tuo messaggio verrà recapitato direttamente, senza aprire un'app email.</p> }
+    @if (loading()) {
+    <p class="contact-form__notice">
+      Verifica disponibilità del servizio di invio…
+    </p>
+    } @else if (!ready()) {
+    <p class="contact-form__notice">
+      Il servizio di invio non è ancora configurato in questa anteprima.
+    </p>
+    } @else {
+    <p class="contact-form__notice">
+      Il tuo messaggio verrà recapitato direttamente, senza aprire un'app email.
+    </p>
+    }
   </div>
   @if (status() !== 'idle') {
-    <p class="contact-form__status" [class.contact-form__status--error]="status() === 'error'" role="status" aria-live="polite">{{ feedback() }}</p>
+  <p
+    class="contact-form__status"
+    [class.contact-form__status--error]="status() === 'error'"
+    role="status"
+    aria-live="polite"
+  >
+    {{ feedback() }}
+  </p>
   }
 </form>
